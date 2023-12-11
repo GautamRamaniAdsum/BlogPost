@@ -1,0 +1,10 @@
+1)crud of blog post
+2)model:- title,post,autor,date
+3)joi validation
+4)error handling
+
+//extra authentication
+user signup,login
+
+pagination
+by mongoose library or custom
