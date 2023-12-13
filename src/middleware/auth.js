@@ -6,7 +6,7 @@ async function auth(req, res, next) {
 
         const token = req.headers.authorization;
         if (!token) {
-            next(new Error("Provided token!!"))
+            next(new Error("Provide token!!"))
         }
         const secret = process.env.SECRET
         const decode = jwt.verify(token, secret);
