@@ -8,6 +8,8 @@ const { handler } = require("./middleware/execptionalHandling")
 require('dotenv').config()
 const app = express()
 const port = 3000
+const http = require('http');
+const https = require('https');
 
 connectMongoDB()
 
@@ -16,12 +18,23 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use(cors())
 app.use(morgan("tiny"))
 
-app.get("/health",(req,res)=>{
-    res.status(200).send({status:"success",msg:"Health done"})
+app.get("/health", (req, res) => {
+    res.status(200).send({ status: "success", msg: "Health done" })
 })
 
 app.use("/api", router)
 
 app.use(handler)
 
-app.listen(port, () => console.log(`Example app listening on port ${port}`))
+let server = http.createServer(app);
+if (process.env.KEY || process.env.CERT) {
+    const HTTP_KEY = process.env.KEY;
+    const HTTP_CERT = process.env.CERT;
+    const KEY = fs.readFileSync(HTTP_KEY);
+    const CERT = fs.readFileSync(HTTP_CERT);
+    server = https.createServer({ key: KEY, cert: CERT }, this.app);
+}
+
+server.listen(port, () => {
+    console.log(`server listening on ${port}`);
+});
