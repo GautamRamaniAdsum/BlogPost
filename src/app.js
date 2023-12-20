@@ -16,6 +16,10 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use(cors())
 app.use(morgan("tiny"))
 
+app.get("/health",(req,res)=>{
+    res.send(200).send({status:"sucess",msg:"Health done"})
+})
+
 app.use("/api", router)
 
 app.use(handler)
