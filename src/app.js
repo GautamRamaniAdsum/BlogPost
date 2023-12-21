@@ -32,7 +32,7 @@ if (process.env.KEY || process.env.CERT) {
     const HTTP_CERT = process.env.CERT;
     const KEY = fs.readFileSync(HTTP_KEY);
     const CERT = fs.readFileSync(HTTP_CERT);
-    server = https.createServer({ key: KEY, cert: CERT }, this.app);
+    server = https.createServer({ key: KEY, cert: CERT },app);
 }
 
 server.listen(port, () => {
