@@ -26,15 +26,20 @@ app.use("/api", router)
 
 app.use(handler)
 
-let server = http.createServer(app);
+let server;
 if (process.env.KEY || process.env.CERT) {
     const HTTP_KEY = process.env.KEY;
     const HTTP_CERT = process.env.CERT;
     const KEY = fs.readFileSync(HTTP_KEY);
     const CERT = fs.readFileSync(HTTP_CERT);
-    server = https.createServer({ key: KEY, cert: CERT },app);
+
+    server = https.createServer({ key: KEY, cert: CERT }, app);
+    console.log('HTTPS server started');
+} else {
+    server = http.createServer(app);
+    console.log('HTTP server started');
 }
 
 server.listen(port, () => {
-    console.log(`server listening on ${port}`);
+    console.log(`Server listening on port ${port}`);
 });
