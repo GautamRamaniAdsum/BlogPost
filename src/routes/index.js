@@ -1,12 +1,14 @@
 const express = require('express')
 const router = express()
-const { signUp, login } = require("../controller/userController")
+const { signUp, login, profileImage } = require("../controller/userController")
 const { auth } = require("../middleware/auth")
 const { creatBlog, updateBlog, getBlog, removeBlog, getBlogCustom, getBlogV2 } = require("../controller/blogController")
 
 //user
 router.post("/signUp", signUp)
 router.post("/login", login)
+
+router.post("/proileImage", profileImage)
 
 //blog
 router.post("/creatBlog", auth, creatBlog)

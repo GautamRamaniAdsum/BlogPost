@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema({
     },
     password: { type: String, required: true },
     token: { type: String },
+    profileImage: { type: String },
     date: { type: Date, default: Date.now }
 });
 
