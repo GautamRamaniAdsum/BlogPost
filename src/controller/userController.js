@@ -92,7 +92,7 @@ async function addProfileImage(req, res, next) {
             if (!isProfileImageExists) {
                 const uploadResult = await uploadToS3(file, 'ProfileImages');
 
-                let profileImage = await User.findOneAndUpdate({ _id: userId }, {
+                let profileImage = await User.findByIdAndUpdate({ _id: userId }, {
                     $set: {
                         profileImage: uploadResult.Location
                     }
