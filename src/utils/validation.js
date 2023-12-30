@@ -3,8 +3,7 @@ const validateFile = async (
     file,
     fieldName,
     allowedExtension,
-    maxSizeInMb,
-    next
+    maxSizeInMb
 ) => {
     let errorMessage = '';
     let isValidFile = true;
@@ -43,7 +42,7 @@ const validateFile = async (
     }
 
     if (!isValidFile) {
-        next(errorMessage);
+        throw new Error(errorMessage);
     }
 };
 
