@@ -79,7 +79,7 @@ async function addProfileImage(req, res, next) {
     try {
         const file = req.file;
         const userId = req.user.id;
-        console.log("userId::", userId);
+        console.log("typeof userId::",typeof userId);
         const maxSize = USER_CONSATNT.USER_PROFILE_IMAGE_FILE_SIZE;
 
         // validate avatarImage file
