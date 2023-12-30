@@ -77,7 +77,7 @@ async function addProfileImage(req, res, next) {
     try {
         const userId = req.user.id;
         console.log("req::", req);
-        const file = req.file;
+        const file = req.body.file;
         const maxSize = USER_CONSATNT.USER_PROFILE_IMAGE_FILE_SIZE;
 
         console.log("userId::", userId, "file::", file, "size::", maxSize);
