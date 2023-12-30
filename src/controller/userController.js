@@ -86,7 +86,7 @@ async function addProfileImage(req, res, next) {
         console.log("userId::", userId);
         let user = await User.findOne({ _id: userId })
         console.log("user::", user);
-        if (!user) {
+        if (user) {
 
             let isProfileImageExists = await User.findOne({ profileImage: { $exists: true } })
 
