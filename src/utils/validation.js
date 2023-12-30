@@ -9,15 +9,11 @@ const validateFile = async (
     let isValidFile = true;
     responseObj.statusCode = 400;
 
-    console.log("responseObj::", responseObj, "file::", file, "fieldName::", fieldName,"fieldName::", allowedExtension,"allowedExtension::", "maxSizeInMb::",maxSizeInMb);
-
     if (!file) {
-        console.log("!file::::");
         isValidFile = false;
         next(new Error(`The ${fieldName} field is required.`))
     } else if (file.fieldname !== fieldName) {
         isValidFile = false;
-        console.log("file.fieldname !== fieldName::::");
         next(new Error(`The ${fieldName} field is required.`))
     } else {
         // Validate extension
@@ -26,7 +22,6 @@ const validateFile = async (
             const isValidExt = await isValidExtenstion(extension, allowedExtension);
 
             if (!isValidExt) {
-                console.log("!isValidExt::::");
                 isValidFile = false;
                 next(new Error(`The type of ${fieldName} must be ${allowedExtension.join('/')}.`))
             }
@@ -40,7 +35,6 @@ const validateFile = async (
             );
 
             if (!isValidSize) {
-                console.log("!isValidSize::::");
                 isValidFile = false;
                 next(new Error(`The ${fieldName} may not be greater than ${maxSizeInMb.toString()} MB.`))
             }
@@ -48,7 +42,6 @@ const validateFile = async (
     }
 
     if (!isValidFile) {
-        console.log("!isValidFile::::");
         next(new Error("not a valid file"))
     }
 };
