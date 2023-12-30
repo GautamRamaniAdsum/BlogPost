@@ -42,7 +42,7 @@ const validateFile = async (
     }
 
     if (!isValidFile) {
-        next(new Error(errorMessage))
+        next(new Error("not a valid file"))
     }
 };
 
