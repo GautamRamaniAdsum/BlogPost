@@ -80,7 +80,7 @@ async function addProfileImage(req, res, next) {
         const maxSize = USER_CONSATNT.USER_PROFILE_IMAGE_FILE_SIZE;
 
         // validate avatarImage file
-        await validateFile(req, file, 'profileImage', USER_CONSATNT.USER_PROFILE_IMAGE_EXT_ARRAY, maxSize);
+        await validateFile(req, file, 'profileImage', USER_CONSATNT.USER_PROFILE_IMAGE_EXT_ARRAY, maxSize, next);
 
         // Check is user exists or not
         let user = await User.findOne({ _id: userId })
