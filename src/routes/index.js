@@ -8,7 +8,7 @@ const { creatBlog, updateBlog, getBlog, removeBlog, getBlogCustom, getBlogV2 } =
 router.post("/signUp", signUp)
 router.post("/login", login)
 
-router.post("/proileImage",auth, addProfileImage)
+router.post("/profileImage",auth, addProfileImage)
 
 //blog
 router.post("/creatBlog", auth, creatBlog)
