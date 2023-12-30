@@ -79,6 +79,8 @@ async function addProfileImage(req, res, next) {
         const file = req.file;
         const maxSize = USER_CONSATNT.USER_PROFILE_IMAGE_FILE_SIZE;
 
+        console.log("userId::", userId, "file::", file, "size::", maxSize);
+
         // validate avatarImage file
         await validateFile(req, file, 'profileImage', USER_CONSATNT.USER_PROFILE_IMAGE_EXT_ARRAY, maxSize, next);
 
@@ -90,7 +92,7 @@ async function addProfileImage(req, res, next) {
             let isProfileImageExists = await User.findOne({ profileImage: { $exists: true } })
 
             if (!isProfileImageExists) {
-                const uploadResult = await uploadToS3(file, 'AvatarImages');
+                const uploadResult = await uploadToS3(file, 'ProfileImages');
 
                 let profileImage = await User.findOneAndUpdate({ _id: userId }, {
                     $set: {
