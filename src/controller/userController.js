@@ -83,9 +83,7 @@ async function addProfileImage(req, res, next) {
         await validateFile(req, file, 'profileImage', USER_CONSATNT.USER_PROFILE_IMAGE_EXT_ARRAY, maxSize, next);
 
         // Check is user exists or not
-        console.log("userId::", userId);
         let user = await User.findOne({ _id: userId })
-        console.log("user::", user);
         if (user) {
 
             let isProfileImageExists = await User.findOne({ profileImage: { $exists: true } })
