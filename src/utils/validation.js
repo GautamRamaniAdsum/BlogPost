@@ -3,18 +3,18 @@ const validateFile = async (
     file,
     fieldName,
     allowedExtension,
-    maxSizeInMb
+    maxSizeInMb,
+    next
 ) => {
-    let errorMessage = '';
     let isValidFile = true;
     responseObj.statusCode = 400;
 
     if (!file) {
         isValidFile = false;
-        errorMessage = `The ${fieldName} field is required.`
+        next(new Error(`The ${fieldName} field is required.`))
     } else if (file.fieldname !== fieldName) {
         isValidFile = false;
-        errorMessage = `The ${fieldName} field is required.`
+        next(new Error(`The ${fieldName} field is required.`))
     } else {
         // Validate extension
         if (allowedExtension.length > 0) {
@@ -23,7 +23,7 @@ const validateFile = async (
 
             if (!isValidExt) {
                 isValidFile = false;
-                errorMessage = `The type of ${fieldName} must be ${allowedExtension.join('/')}.`
+                next(new Error(`The type of ${fieldName} must be ${allowedExtension.join('/')}.`))
             }
         }
 
@@ -36,13 +36,13 @@ const validateFile = async (
 
             if (!isValidSize) {
                 isValidFile = false;
-                errorMessage = `The ${fieldName} may not be greater than ${maxSizeInMb.toString()} MB.`
+                next(new Error(`The ${fieldName} may not be greater than ${maxSizeInMb.toString()} MB.`))
             }
         }
     }
 
     if (!isValidFile) {
-        throw new Error(errorMessage);
+        next(new Error(errorMessage))
     }
 };
 

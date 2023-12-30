@@ -73,7 +73,7 @@ async function login(req, res) {
     }
 }
 
-async function addProfileImage(req, res) {
+async function addProfileImage(req, res, next) {
     try {
         const userId = req.user.id;
         const file = req.file;
