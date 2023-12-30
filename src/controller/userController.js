@@ -1,6 +1,9 @@
 const { User } = require("../model/userModel");
 const jwt = require('jsonwebtoken');
 const { validateSignup, validateLogin } = require("../validation/userValidation")
+const { USER_CONSATNT } = require("../constant/userConstant")
+const { validateFile } = require("../utils/validation")
+const { uploadToS3 } = require("../utils/s3")
 
 async function signUp(req, res) {
     try {
@@ -43,7 +46,7 @@ async function login(req, res) {
 
                 if (isPassword) {
 
-                    const secret= process.env.SECRET
+                    const secret = process.env.SECRET
                     let accessToken = jwt.sign({ id: isPassword._id }, secret);
 
                     await User.findOneAndUpdate({ email: isPassword.email },
@@ -70,46 +73,43 @@ async function login(req, res) {
     }
 }
 
-async function profileImage(req, res) {
+async function addProfileImage(req, res) {
     try {
-        const data = req.body;
-        const { error, value: payload } = await validateLogin(data)
-        if (error) {
-            return res.send({ data: {}, status: "false", msg: error.details[0].message })
-        } else {
+        const userId = req.user.id;
+        const file = req.file;
+        const maxSize = USER_CONSATNT.USER_PROFILE_IMAGE_FILE_SIZE;
 
-            const user = await User.findOne({ email: payload.email })
-            if (user) {
+        // validate avatarImage file
+        await validateFile(req, file, 'profileImage', USER_CONSATNT.USER_PROFILE_IMAGE_EXT_ARRAY, maxSize);
 
-                const isPassword = await User.findOne({ password: payload.password })
+        // Check is user exists or not
+        let user = await User.findOne({ _id: userId })
 
-                if (isPassword) {
+        if (!user) {
 
-                    const secret= process.env.SECRET
-                    let accessToken = jwt.sign({ id: isPassword._id }, secret);
+            let isProfileImageExists = await User.findOne({ profileImage: { $exists: true } })
 
-                    await User.findOneAndUpdate({ email: isPassword.email },
-                        {
-                            $set: {
-                                token: accessToken
-                            }
-                        })
-                    const data = {
-                        name: isPassword.name,
-                        token: accessToken
+            if (!isProfileImageExists) {
+                const uploadResult = await uploadToS3(file, 'AvatarImages');
+
+                let profileImage = await User.findOneAndUpdate({ _id: userId }, {
+                    $set: {
+                        profileImage: uploadResult.Location
                     }
-                    return res.status(200).send({ data: data, status: "success", msg: "User login successfully" })
-                } else {
-                    return res.status(400).send({ data: {}, status: "false", msg: "Password does not match" })
-                }
+                }, { new: true })
+                return res.status(200).send({ data: profileImage, status: "success", msg: "User profile image added successfully" })
             } else {
-                return res.status(400).send({ data: {}, status: "false", msg: "Email does not exist" })
+                return res.status(400).send({ data: {}, status: "false", msg: "Profile image already exist" })
             }
+
+        } else {
+            return res.status(400).send({ data: {}, status: "false", msg: "User does not exist" })
         }
+
     } catch (error) {
         console.log(error);
         return res.status(400).send({ data: {}, status: "false", msg: "something went wrong" })
     }
 }
 
-module.exports = { signUp, login, profileImage }
+module.exports = { signUp, login, addProfileImage }

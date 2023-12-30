@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express()
-const { signUp, login, profileImage } = require("../controller/userController")
+const { signUp, login, addProfileImage } = require("../controller/userController")
 const { auth } = require("../middleware/auth")
 const { creatBlog, updateBlog, getBlog, removeBlog, getBlogCustom, getBlogV2 } = require("../controller/blogController")
 
@@ -8,7 +8,7 @@ const { creatBlog, updateBlog, getBlog, removeBlog, getBlogCustom, getBlogV2 } =
 router.post("/signUp", signUp)
 router.post("/login", login)
 
-router.post("/proileImage", profileImage)
+router.post("/proileImage",auth, addProfileImage)
 
 //blog
 router.post("/creatBlog", auth, creatBlog)
