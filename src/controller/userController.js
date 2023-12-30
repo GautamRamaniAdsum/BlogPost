@@ -1,5 +1,7 @@
 const { User } = require("../model/userModel");
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const { validateSignup, validateLogin } = require("../validation/userValidation")
 const { USER_CONSATNT } = require("../constant/userConstant")
 const { validateFile } = require("../utils/validation")
@@ -84,7 +86,7 @@ async function addProfileImage(req, res, next) {
         await validateFile(req, file, 'profileImage', USER_CONSATNT.USER_PROFILE_IMAGE_EXT_ARRAY, maxSize, next);
 
         // Check is user exists or not
-        let user = await User.findOne({ _id: userId })
+        let user = await User.findOne({ _id: new ObjectId(userId) })
 
         if (!user) {
 
@@ -93,7 +95,7 @@ async function addProfileImage(req, res, next) {
             if (!isProfileImageExists) {
                 const uploadResult = await uploadToS3(file, 'ProfileImages');
 
-                let profileImage = await User.findOneAndUpdate({ _id: userId }, {
+                let profileImage = await User.findOneAndUpdate({ _id: new ObjectId(userId) }, {
                     $set: {
                         profileImage: uploadResult.Location
                     }
