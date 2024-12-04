@@ -20,7 +20,7 @@ app.use(cors())
 app.use(morgan("tiny"))
 
 app.get("/health", (req, res) => {
-    res.status(200).send({ status: "success", msg: "Health done..." })
+    res.status(200).send({ status: "success", msg: "Github CI-CD Runner" })
 })
 
 app.use("/api", router)
