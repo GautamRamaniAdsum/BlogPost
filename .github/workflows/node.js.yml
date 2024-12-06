@@ -19,3 +19,4 @@ jobs:
         echo "PORT=${{ secrets.PORT }}" >> .env
     - run: npm ci
     - run: pm2 restart src/app.js
+    
